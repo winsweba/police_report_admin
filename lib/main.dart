@@ -6,6 +6,7 @@ import 'package:police_office/pages/home_page.dart';
 import 'package:police_office/pages/login_page.dart';
 
 import 'firebase_options.dart';
+import 'pages/all_users_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,8 +51,8 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           '/login_page/': (context) => const LoginPage(),
-          // '/register_page/': (context) => const RegisterPage(),
-          // '/home_page/': (context) => const HomePage(),
+          '/all_users_page/': (context) => const AllUsersPage(),
+          '/home_page/': (context) => const HomePage(),
           
         },
     );

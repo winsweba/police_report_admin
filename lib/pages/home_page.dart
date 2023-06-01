@@ -660,6 +660,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../models/report_model.dart';
+import 'all_users_page.dart';
 import 'details_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -670,8 +671,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final CollectionReference _postedReport =
-      FirebaseFirestore.instance.collection("report");
+  // final CollectionReference _postedReport =
+  //     FirebaseFirestore.instance.collection("report");
   // final CollectionReference _postedReport = FirebaseFirestore.instance.collection("report").orderBy("name", descending: true);
   @override
   Widget build(BuildContext context) {
@@ -681,7 +682,11 @@ class _HomePageState extends State<HomePage> {
         leading: IconButton(
           icon: const Icon(Icons.person, size: 30.0),
           onPressed: () {
-            print("Print");
+             Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => AllUsersPage(),
+                          ),
+                        );
             // _launchUrl();
           },
         ),
@@ -709,28 +714,19 @@ class _HomePageState extends State<HomePage> {
                   return Card(
                     margin: const EdgeInsets.all(10),
                     child: ListTile(
-                      title: Text(tSnapshot.reporterName),
-                      // subtitle: Text(documentSnapshot['messageReported']),
+                      title: Text(tSnapshot.reporterName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),),
+                      subtitle: Text(tSnapshot.reporterLocation, style: TextStyle(fontSize: 16),),
                       onTap: () {
-                        // Navigator.of(context).pushAndRemoveUntil(
-                        //     MaterialPageRoute(
-                        //         builder: (context) => DetailsPage(
-                        //               messageReported:
-                        //                   tSnapshot.messageReported,
-                        //               reporterLocation:
-                        //                   tSnapshot.reporterLocation,
-                        //               reporterName: tSnapshot.reporterName,
-                        //               reporterPhone: tSnapshot.reporterPhone,
-                        //             )),
-                        //     (Route<dynamic> route) => false);
-
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => DetailsPage(
                               messageReported: tSnapshot.messageReported,
                               reporterLocation: tSnapshot.reporterLocation,
                               reporterName: tSnapshot.reporterName,
-                              reporterPhone: tSnapshot.reporterPhone, locationLat: tSnapshot.locationLat, locationLong: tSnapshot.locationLong, fileSend: tSnapshot.fileSend,
+                              reporterPhone: tSnapshot.reporterPhone,
+                              locationLat: tSnapshot.locationLat,
+                              locationLong: tSnapshot.locationLong,
+                              fileSend: tSnapshot.fileSend,
                             ),
                           ),
                         );
@@ -747,7 +743,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Stream<List<ReportModel>> getAllReport() => FirebaseFirestore.instance
-      .collection("report").orderBy("timestamp", descending: true)
+      .collection("report")
+      .orderBy("timestamp", descending: true)
       .snapshots()
       .map((snapshot) => snapshot.docs
           .map((doc) => ReportModel.fromJson(doc.data()))
